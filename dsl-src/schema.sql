@@ -1,4 +1,4 @@
-CREATE TABLE users (
+CREATE TABLE "user" (
   id         serial  NOT NULL
 , username   varchar NOT NULL
 , password   varchar NOT NULL

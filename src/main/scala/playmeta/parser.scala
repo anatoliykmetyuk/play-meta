@@ -37,7 +37,7 @@ object parser {
     Pass ~ createTable.rep.map(_.toList)
 
   def createTable[_: P]: P[CreateTable] =
-    P( k.create ~ k.table ~ t.name.! ~ "(" ~ createTableArgs ~ ")" ~ ";").map { case
+    P( k.create ~ k.table ~ (t.name.! | "\"" ~ t.name.! ~ "\"") ~ "(" ~ createTableArgs ~ ")" ~ ";").map { case
       (name, args) => CreateTable(
           name
         , args.collect { case x: Field      => x }.toList
