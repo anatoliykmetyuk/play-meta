@@ -1,0 +1,16 @@
+forum_message:
+  find: topic
+
+user:
+  find:
+    - [username, password]
+    - saltedHashId:
+        parameters: [hash, String]
+        body: encode(sha256(concat(
+          id::text, ${config.sessionSalt})::bytea), 'hex') = $hash
+session:
+  delete:
+    - session_id
+    - oldAge:
+        parameters: [maxAgeSeconds, Int]
+        body: extract(epoch from (now() - created_at)) > $maxAgeSeconds

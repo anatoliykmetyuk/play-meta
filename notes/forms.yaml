@@ -1,0 +1,24 @@
+LoginData:
+  parameters:
+    username: String
+    password: String
+
+RegisterData:
+  parameters: [username,
+    password, repeat_password, first_name, last_name, address]
+
+  imports:
+    - org.apache.commons.codec.digest.DigestUtils.sha256Hex
+
+  to:
+    target: User
+    mappingOverrides:
+      id: None
+      password: sha256Hex(password)
+    mappingExclude: [repeat_password]
+
+ForumTopic:
+  parametersExclude: optional
+
+ForumMessage:
+  parametersExclude: optional
