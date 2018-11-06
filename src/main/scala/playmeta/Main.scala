@@ -1,9 +1,10 @@
 package playmeta
 
-import cats._, cats.implicits._
+import fastparse._
 
 object Main {
   def main(args: Array[String]): Unit = {
-    println("Hello World!")
+    val result = parse("CREATE TABLE users", SchemaParser.createTable(_))
+    println(result)
   }
 }
