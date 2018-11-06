@@ -2,7 +2,9 @@ package playmeta
 
 import fastparse._, MultiLineWhitespace._
 
-object SchemaParser {
+import ast._
+
+object parser {
   object keyword {
     def create[_: P] = IgnoreCase("create")
     def table [_: P] = IgnoreCase("table" )

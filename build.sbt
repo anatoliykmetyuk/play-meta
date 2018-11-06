@@ -7,7 +7,8 @@ lazy val commonSettings = Seq(
 , libraryDependencies ++= Seq(
     "org.typelevel"        %% "cats-effect"  % "1.0.0"
   , "com.github.pathikrit" %% "better-files" % "3.6.0"
-  , "com.lihaoyi" %% "fastparse" % "2.0.5"
+  , "com.lihaoyi"          %% "fastparse"    % "2.0.5"
+  , "org.apache.commons"   %  "commons-text" % "1.6"
   )
 
 , addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8")
