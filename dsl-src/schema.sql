@@ -1,4 +1,3 @@
---------------- Schema ---------------------
 CREATE TABLE users (
   id         serial  NOT NULL
 , username   varchar NOT NULL
