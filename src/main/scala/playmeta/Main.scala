@@ -15,17 +15,27 @@ object Main {
   }
 
   def generateSources(tables: List[CreateTable]): Unit = {
-    val pkgname  = "gameforum.model"
+    import gen._
+
+    val pkgname  = "gameforum"
     val outdir   = file"out/"
-    val modelDir = file"$outdir/${pkgname.replace('.', '/')}"
+
+    val generators: List[Generator] = List(db, model)
 
     outdir.clear()
-    modelDir.createDirectoryIfNotExists()
-    tables.foreach { table =>
-      val name   = gen.modelName(table.name)
-      val source = gen.model(table, Some(pkgname))
-      val file   = file"$modelDir/$name.scala"
-      file.write(source)
+
+    for {
+      table     <- tables
+      generator <- generators
+    } {
+      val name   = generator.name(table)
+      val subpkg = generator.subpackage
+      val source = generator(table, Some(pkgname))
+      val genDir = file"$outdir/$pkgname/$subpkg/"
+      val file   = file"$genDir/$name.scala"
+
+      genDir.createDirectoryIfNotExists()
+      file.write(source)    
     }
   }
 }
