@@ -1,41 +1,26 @@
 package playmeta
 
-import fastparse._, Parsed._
+import cats._, cats.implicits._, cats.data._, cats.effect._
 import better.files._, better.files.File._, java.io.{ File => JFile }
+import thera._, thera.runtime._, Context.names
+import io.circe._
 
-import ast._
+object Main extends App {
+  val localFunctions = names(
+    "opt" -> function[Text, Runtime] { (varName, elseCond) =>
+      State.get[Context] >>= { ctx =>
+        ifFunc(varName.value, ctx(varName.value), elseCond) } }
+  )
 
-object Main {
-  def main(args: Array[String]): Unit = {
-    val schema = file"dsl-src/schema.sql".contentAsString
-    parse(schema, parser.createTables(_)) match {
-      case Success(v, _) => println(v.mkString("\n\n")); generateSources(v)
-      case f: Failure    => println(f)
-    }
-  }
+  implicit val ctx = predef.ctx |+| localFunctions
 
-  def generateSources(tables: List[CreateTable]): Unit = {
-    import gen._
 
-    val pkgname  = "gameforum"
-    val outdir   = file"out/"
+  val yamlRaw: String = file"data/model.yaml".contentAsString
+  val data: Map[String, Json] =
+    yaml.parser.parse(yamlRaw).right.get.asObject.get.toMap
 
-    val generators: List[Generator] = List(db, model)
+  val template = compile(file"src-tml/schema.sql".contentAsString).asFunc
+  val (name, spec) = data.toList.head
 
-    outdir.clear()
-
-    for {
-      table     <- tables
-      generator <- generators
-    } {
-      val name   = generator.name(table)
-      val subpkg = generator.subpackage
-      val source = generator(table, Some(pkgname))
-      val genDir = file"$outdir/$pkgname/$subpkg/"
-      val file   = file"$genDir/$name.scala"
-
-      genDir.createDirectoryIfNotExists()
-      file.write(source)    
-    }
-  }
+  println(template(name, spec).asString)
 }
