@@ -5,9 +5,9 @@ lazy val commonSettings = Seq(
 , version := "0.1.0"
 , scalaVersion := ScalaVer
 , libraryDependencies ++= Seq(
-    "org.typelevel"        %% "cats-effect"  % "1.0.0"
+    "com.functortech"      %% "thera-predef" % "0.1.0-SNAPSHOT"
+  , "org.typelevel"        %% "cats-effect"  % "1.0.0"
   , "com.github.pathikrit" %% "better-files" % "3.6.0"
-  , "com.lihaoyi"          %% "fastparse"    % "2.0.5"
   , "org.apache.commons"   %  "commons-text" % "1.6"
   )
 
