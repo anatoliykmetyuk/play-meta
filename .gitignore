@@ -22,5 +22,4 @@ project/plugins/project/
 /.ensime*
 
 # Project-specific data
-/data/
 /out/

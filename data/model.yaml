@@ -1,0 +1,16 @@
+user:
+  - { name: username, unique }
+  - password
+  - first_name
+  - last_name
+  - address
+
+forum_topic:
+  - title
+  - { name: author, type: int4, foreign: user }
+
+forum_message:
+  - { name: content   , type: text     ,                      }
+  - { name: author    , type: int4     , foreign: user        }
+  - { name: topic     , type: int4     , foreign: forum_topic }
+  - { name: created_at, type: timestamp, default: now()       }
