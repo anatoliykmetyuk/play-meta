@@ -1,0 +1,14 @@
+---
+[tables]
+---
+
+${foreachSep: $tables, \n\n, ${name, fields =>
+
+  CREATE TABLE "$name" (
+  \s  ${foreachSep: $fields, \n\, , ${field => ${outdent: 6,\
+        ${opt: field.name, $field}\, ${opt: field.type, varchar}\s
+      }\s
+  }}\s
+  )
+
+}}

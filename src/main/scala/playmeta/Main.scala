@@ -16,11 +16,9 @@ object Main extends App {
 
 
   val yamlRaw: String = file"data/model.yaml".contentAsString
-  val data: Map[String, Json] =
-    yaml.parser.parse(yamlRaw).right.get.asObject.get.toMap
 
+  val data     = yaml.parser.parse(yamlRaw).right.get
   val template = compile(file"src-tml/schema.sql".contentAsString).asFunc
-  val (name, spec) = data.toList.head
 
-  println(template(name, spec).asString)
+  println(template(data).asString)
 }
